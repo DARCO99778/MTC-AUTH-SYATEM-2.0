@@ -16,6 +16,9 @@ export default defineConfig({
         ]
       : []),
   ],
+  define: {
+    global: 'globalThis',
+  },
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
@@ -28,15 +31,22 @@ export default defineConfig({
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
     rollupOptions: {
-      external: [
-        'fsevents',
-        'node:fs/promises',
-        'node:fs',
-        'node:path',
-        'node:crypto',
-        'node:stream',
-        'node:util'
-      ]
+      external: (id) => {
+        // Externalize all Node.js built-in modules
+        return id.startsWith('node:') || [
+          'fsevents',
+          'fs',
+          'path',
+          'crypto',
+          'stream',
+          'util',
+          'os',
+          'events',
+          'buffer',
+          'url',
+          'querystring'
+        ].includes(id);
+      }
     }
   },
   server: {
