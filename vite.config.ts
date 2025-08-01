@@ -27,6 +27,17 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      external: [
+        'fsevents',
+        'node:fs/promises',
+        'node:fs',
+        'node:path',
+        'node:crypto',
+        'node:stream',
+        'node:util'
+      ]
+    }
   },
   server: {
     fs: {
